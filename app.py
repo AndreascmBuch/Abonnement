@@ -39,7 +39,7 @@ def create_abonnement():
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute("""
-            INSERT INTO abonnement (
+            INSERT INTO subscription (
                 kunde_id, car_id, term, price_per_month,
                 start_month, end_month, restance, contract_information
             )
@@ -54,6 +54,16 @@ def create_abonnement():
         return jsonify({"error": f"Manglende nøgle: {str(e)}"}), 400
     except Exception as e:
         return jsonify({"error": f"Serverfejl: {str(e)}"}), 500
+
+
+# test route så vi ikke får 404
+@app.route('/', methods=['GET'])
+def home():
+    return jsonify({
+        "service": "Abonnement",
+        "version": "1.0.0",
+        "description": "A RESTful API for managing abonnement"
+    })
 
 
 if __name__ == '__main__':
