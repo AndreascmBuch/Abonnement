@@ -67,6 +67,25 @@ def get_abonnementer():
         return jsonify(subscription), 200
     except Exception as e:
         return jsonify({"error": f"Serverfejl: {str(e)}"}), 500
+    
+
+@app.route('/abonnement/<int:subscription_id>', methods=['GET'])
+def get_abonnement(subscription_id):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM subscription WHERE subscription_id = ?", (subscription_id,))
+        row = cursor.fetchone()
+        conn.close()
+        
+        if row:
+            subscription = dict(row)
+            return jsonify(subscription), 200
+        else:
+            return jsonify({"error": "Abonnement ikke fundet"}), 404
+    except Exception as e:
+        return jsonify({"error": f"Serverfejl: {str(e)}"}), 500
+
 
 # Test-route så vi ikke får 404
 @app.route('/', methods=['GET'])
