@@ -56,6 +56,15 @@ def create_abonnement():
         return jsonify({"error": f"Serverfejl: {str(e)}"}), 500
 
 
+@app.route('/abonnement', methods=['GET'])
+def home():
+    conn=get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM subscription")
+    substription =[dict(row) for row in cursor.fetchall()]
+    conn.close()
+    return jsonify[substription]
+
 # test route så vi ikke får 404
 @app.route('/', methods=['GET'])
 def home():
