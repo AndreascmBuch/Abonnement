@@ -57,15 +57,18 @@ def create_abonnement():
 
 
 @app.route('/abonnement', methods=['GET'])
-def home():
-    conn=get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM subscription")
-    substription =[dict(row) for row in cursor.fetchall()]
-    conn.close()
-    return jsonify[substription]
+def get_abonnementer():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM subscription")
+        subscription = [dict(row) for row in cursor.fetchall()]
+        conn.close()
+        return jsonify(subscription), 200
+    except Exception as e:
+        return jsonify({"error": f"Serverfejl: {str(e)}"}), 500
 
-# test route så vi ikke får 404
+# Test-route så vi ikke får 404
 @app.route('/', methods=['GET'])
 def home():
     return jsonify({
@@ -74,9 +77,9 @@ def home():
         "description": "A RESTful API for managing abonnement"
     })
 
-
 if __name__ == '__main__':
     app.run(debug=True)
+
 
 
 
